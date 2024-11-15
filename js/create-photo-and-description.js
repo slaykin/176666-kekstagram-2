@@ -3,10 +3,10 @@ import {
   PHOTO_COUNT,
   DESCRIPTIONS,
   MESSAGES
-} from "./data";
-import {getRandomInteger} from "./util";
-import {getRandomArrayElement} from "./util";
-import {createRandomIdFromRangeGenerator} from "./util";
+} from './data';
+import {getRandomInteger} from './util';
+import {getRandomArrayElement} from './util';
+import {createRandomIdFromRangeGenerator} from './util';
 
 
 const generatePhotoId = createRandomIdFromRangeGenerator(1, 25);
@@ -34,7 +34,5 @@ const createPhoto = () => {
 };
 
 const photos = () => Array.from({length: PHOTO_COUNT}, createPhoto);
-
-photos();
 
 export {photos};
