@@ -3,10 +3,10 @@ import {
   PHOTO_COUNT,
   DESCRIPTIONS,
   MESSAGES
-} from './data';
-import {getRandomInteger} from './util';
-import {getRandomArrayElement} from './util';
-import {createRandomIdFromRangeGenerator} from './util';
+} from './data.js';
+import {getRandomInteger} from './util.js';
+import {getRandomArrayElement} from './util.js';
+import {createRandomIdFromRangeGenerator} from './util.js';
 
 
 const generatePhotoId = createRandomIdFromRangeGenerator(1, 25);

@@ -1,4 +1,4 @@
-import { photos } from './create-photo-and-description';
+import { photos } from './create-photo-and-description,js';
 
 const pictureTemplate = document.querySelector('#picture')
   .content
