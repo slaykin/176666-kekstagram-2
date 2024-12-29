@@ -1,4 +1,4 @@
-import { photos } from './create-photo-and-description,js';
+import { photos } from './create-photo-and-description.js';
 import { isEscapeKey } from './util.js';
 
 const allMiniatures = document.querySelector('.pictures');
