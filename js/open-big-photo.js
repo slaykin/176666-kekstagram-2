@@ -1,3 +1,4 @@
+
 import { photos } from './create-photo-and-description.js';
 import { isEscapeKey } from './util.js';
 
@@ -50,7 +51,7 @@ function onDocumentKeydown (evt) {
 
 const openBigPicture = (pictureId) => {
   bigPictureBlock.classList.remove('hidden');
-  const selectedPicture = photos.find((photos) => photos.id === +pictureId);
+  const selectedPicture = photos.find((photo) => photo.id === +pictureId);
 
   bigPictureImg.src = selectedPicture.url;
   bigPictureCaption.textContent = selectedPicture.description;
