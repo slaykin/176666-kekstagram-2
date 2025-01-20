@@ -4,10 +4,11 @@ import {
   DESCRIPTIONS,
   MESSAGES
 } from './data.js';
-import {getRandomInteger} from './util.js';
-import {getRandomArrayElement} from './util.js';
-import {createRandomIdFromRangeGenerator} from './util.js';
-
+import {
+  getRandomInteger,
+  getRandomArrayElement,
+  createRandomIdFromRangeGenerator
+} from './util.js';
 
 const generatePhotoId = createRandomIdFromRangeGenerator(1, 25);
 const generateCommentId = createRandomIdFromRangeGenerator(1, 30);
