@@ -1,4 +1,4 @@
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const IsEscapeKey = (evt) => evt.key === 'Escape';
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -29,5 +29,5 @@ export {
   getRandomInteger,
   getRandomArrayElement,
   createRandomIdFromRangeGenerator,
-  isEscapeKey,
+  IsEscapeKey,
 };

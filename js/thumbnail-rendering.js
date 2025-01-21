@@ -1,5 +1,5 @@
 import { photos } from './create-photo-and-description,js';
-import { openBigPicture} from './open-big-photo.js';
+import { openBigPicture } from './open-big-photo.js';
 
 const pictureTemplate = document.querySelector('#picture')
   .content
@@ -13,7 +13,7 @@ pictureContainer.addEventListener('click', (evt) => {
 
   if (targetPicture) {
     evt.preventDefault();
-    openBigPicture(targetPicture.dataset.pictureId);
+    openBigPicture(targetPicture.dataset.photo);
   }
 });
 
