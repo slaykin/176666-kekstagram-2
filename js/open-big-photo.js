@@ -1,5 +1,5 @@
 
-import { isEscapeKey } from './util.js';
+import { IsEscapeKey } from './util.js';
 
 const bigPictureBlock = document.querySelector('.big-picture');
 const bigPictureImg = bigPictureBlock.querySelector('.big-picture__img img');
@@ -42,7 +42,7 @@ function onCloseButtonClick (evt) {
 }
 
 function onDocumentKeydown (evt) {
-  if (isEscapeKey(evt)) {
+  if (IsEscapeKey(evt)) {
     closeBigPicture();
   }
 }
