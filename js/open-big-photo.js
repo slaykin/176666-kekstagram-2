@@ -1,8 +1,6 @@
-
 import { photos } from './create-photo-and-description.js';
 import { IsEscapeKey } from './util.js';
 
-const pictureContainer = document.querySelector('.pictures');
 const bigPictureBlock = document.querySelector('.big-picture');
 const bigPictureImg = bigPictureBlock.querySelector('.big-picture__img img');
 const bigPictureCaption = bigPictureBlock.querySelector('.social__caption');
@@ -70,11 +68,4 @@ const openBigPicture = (pictureId) => {
   document.body.addEventListener('keydown', onDocumentKeydown);
 };
 
-pictureContainer.addEventListener('click', (evt) => {
-  const targetPicture = evt.target.closest('.picture');
-
-  if (targetPicture) {
-    evt.preventDefault();
-    openBigPicture(targetPicture.dataset.pictureId);
-  }
-});
+export {openBigPicture};
