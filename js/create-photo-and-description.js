@@ -34,6 +34,6 @@ const createPhoto = () => {
   return photo;
 };
 
-const photos = () => Array.from({length: PHOTO_COUNT}, createPhoto);
+const photos = Array.from({length: PHOTO_COUNT}, createPhoto);
 
-export {photos};
+export { photos };

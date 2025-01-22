@@ -1,6 +1,8 @@
 
+import { photos } from './create-photo-and-description.js';
 import { IsEscapeKey } from './util.js';
 
+const pictureContainer = document.querySelector('.pictures');
 const bigPictureBlock = document.querySelector('.big-picture');
 const bigPictureImg = bigPictureBlock.querySelector('.big-picture__img img');
 const bigPictureCaption = bigPictureBlock.querySelector('.social__caption');
@@ -47,25 +49,32 @@ function onDocumentKeydown (evt) {
   }
 }
 
-const openBigPicture = (photo) => {
+const openBigPicture = (pictureId) => {
   bigPictureBlock.classList.remove('hidden');
+  const selectedPicture = photos.find((photo) => photo.id === +pictureId);
 
-  bigPictureImg.src = photo.url;
-  bigPictureCaption.textContent = photo.description;
-  bigPictureLikesCount.textContent = photo.likes;
-  bigPictureCommentShownCount.textContent = photo.comments.length;
-  bigPictureCommentTotalCount.textContent = photo.comments.length;
+  bigPictureImg.src = selectedPicture.url;
+  bigPictureCaption.textContent = selectedPicture.description;
+  bigPictureLikesCount.textContent = selectedPicture.likes;
+  bigPictureCommentShownCount.textContent = selectedPicture.comments.length;
+  bigPictureCommentTotalCount.textContent = selectedPicture.comments.length;
 
-  renderAllComments(photo.comments);
+  renderAllComments(selectedPicture.comments);
 
   bigPictureCommentCount.classList.add('hidden');
   bigPictureCommentsLoader.classList.add('hidden');
 
   document.body.classList.add('modal-open');
 
-  document.addEventListener('keydown', onDocumentKeydown);
+  onCloseButton.addEventListener('click', onCloseButtonClick);
+  document.body.addEventListener('keydown', onDocumentKeydown);
 };
 
-onCloseButton.addEventListener('click', onCloseButtonClick);
+pictureContainer.addEventListener('click', (evt) => {
+  const targetPicture = evt.target.closest('.picture');
 
-export {openBigPicture};
+  if (targetPicture) {
+    evt.preventDefault();
+    openBigPicture(targetPicture.dataset.pictureId);
+  }
+});
