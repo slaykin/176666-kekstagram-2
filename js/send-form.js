@@ -1,5 +1,5 @@
 import { IsEscapeKey } from './util.js';
-import { hashtagHandler, getErrorMessage as getHashtagError, descriptionHandler, getErrorMessage as getDescriptionError } from './hashtags-validate.js';
+import { hashtagHandler, getErrorMessage as getHashtagError, descriptionHandler, getErrorMessage as getDescriptionError } from './validation-form.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const userImage = imageUploadForm.querySelector('.img-upload__input');
