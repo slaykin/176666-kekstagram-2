@@ -1,55 +1,48 @@
-const MAX_SYMBOLS = 20;
+const DESCRIPTION_MAX_LENGTH = 140;
 
-const MAX_HASHTAGS = 5;
 let errorMessage = '';
 
-const hashtagError = () => errorMessage;
+const getErrorMessage = () => errorMessage;
+
+const setErrorMessage = (message) => {
+  errorMessage = message;
+};
 const hashtagHandler = (value) => {
-  errorMessage = '';
-  const inputText = value.toLowerCase().trim();
-  if (!inputText) {
+  const inputArray = value.trim().split(/\s+/);
+  if (!value.trim()) {
     return true;
   }
-  const inputArray = inputText.split(/\s+/);
 
-  const rules = [
-    {
-      check: inputArray.some((item) => item[0] !== '#'),
-      error: 'Хэштег должен начинаться с символа "#"',
-    },
-    {
-      check: inputArray.some((item) => item === '#'),
-      error: 'Хэштег не может состоять только из символа "#"',
-    },
-    {
-      check: inputArray.some((item) => item.indexOf('#', 1) >= 1),
-      error: 'Хэштеги разделяются пробелами'
-    },
-    {
-      check: inputArray.some((item, num, arr) => arr.includes(item, num + 1)),
-      error: 'Хэштеги не должны повторяться'
-    },
-    {
-      check: inputArray.some((item) => item.length > MAX_SYMBOLS),
-      error: `Максимальная длина одного хэштега ${MAX_SYMBOLS} символов, включая символ "#"`
-    },
-    {
-      check: inputArray.length > MAX_HASHTAGS,
-      error: `Хэштегов должно быть не больше ${MAX_HASHTAGS}`
-    },
-    {
-      check: inputArray.some((item) => !/^#[a-zа-яё0-9]{1,19}$/i.test(item)),
-      error: 'Хэштег содержит недопустимый символ'
-    },
-  ];
+  const validHashtagPattern = /^(?:(?:#([a-zA-Zа-яА-Я0-9]{1,19}))\s*){0,5}$/;
+  const uniqueHashtags = new Set();
 
-  return rules.every((rule) => {
-    const isInvalid = rule.check;
-    if (isInvalid) {
-      errorMessage = rule.error;
+  for (const hashtag of inputArray) {
+    const lowerTag = hashtag.toLowerCase();
+
+    if (!validHashtagPattern.test(hashtag)) {
+      setErrorMessage('Введён невалидный хэштег');
+      return false;
     }
-    return !isInvalid;
-  });
+
+    if (uniqueHashtags.has(lowerTag)) {
+      setErrorMessage('Хэштеги повторяются');
+      return false;
+    }
+    uniqueHashtags.add(lowerTag);
+  }
+
+  setErrorMessage('');
+  return true;
+};
+// Валидация дескрипшина
+const descriptionHandler = (value) => {
+  const descriptionText = value.trim();
+  if (descriptionText.length > DESCRIPTION_MAX_LENGTH) {
+    setErrorMessage(`длина комментария больше ${DESCRIPTION_MAX_LENGTH} символов`);
+    return false;
+  }
+  setErrorMessage('');
+  return true;
 };
 
-export {hashtagHandler, hashtagError};
+export { getErrorMessage, hashtagHandler, descriptionHandler };

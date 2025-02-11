@@ -1,6 +1,5 @@
 import { IsEscapeKey } from './util.js';
-import { hashtagHandler, hashtagError } from './hashtags-validate.js';
-import { descriptionHandler, descriptionError } from './description-validate.js';
+import { hashtagHandler, getErrorMessage as getHashtagError, descriptionHandler, getErrorMessage as getDescriptionError } from './hashtags-validate.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const userImage = imageUploadForm.querySelector('.img-upload__input');
@@ -51,27 +50,15 @@ function onDocumentKeydown (evt) {
   }
 }
 
-const onHashtagFieldInput = () => {
-  if (pristine.validate()) {
-    imageUploadFormSubmitButton.disabled = false;
-  } else {
-    imageUploadFormSubmitButton.disabled = true;
-  }
+const toggleSubmitButton = () => {
+  imageUploadFormSubmitButton.disabled = !pristine.validate();
 };
 
-const onDescriptionInput = () => {
-  if (pristine.validate()) {
-    imageUploadFormSubmitButton.disabled = false;
-  } else {
-    imageUploadFormSubmitButton.disabled = true;
-  }
-};
+pristine.addValidator(hashtagField, hashtagHandler, getHashtagError);
+hashtagField.addEventListener('input', toggleSubmitButton);
 
-pristine.addValidator(hashtagField, hashtagHandler, hashtagError);
-hashtagField.addEventListener('input', onHashtagFieldInput);
-
-pristine.addValidator(descriptionField, descriptionHandler, descriptionError);
-descriptionField.addEventListener('input', onDescriptionInput);
+pristine.addValidator(descriptionField, descriptionHandler, getDescriptionError);
+descriptionField.addEventListener('input', toggleSubmitButton);
 
 userImage.addEventListener('change', onUserImageChange);
 imageUploadCancelButton.addEventListener('click', onImageUploadCancelButtonClick);
