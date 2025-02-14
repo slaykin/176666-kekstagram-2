@@ -1,5 +1,5 @@
 import { IsEscapeKey } from './util.js';
-import { hashtagHandler, getErrorMessage as getHashtagError, descriptionHandler, getErrorMessage as getDescriptionError } from './validation-form.js';
+import { validateHashtag, getErrorMessage as getHashtagError, validateDescription, getErrorMessage as getDescriptionError } from './validation-form.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const userImage = imageUploadForm.querySelector('.img-upload__input');
@@ -54,10 +54,10 @@ const toggleSubmitButton = () => {
   imageUploadFormSubmitButton.disabled = !pristine.validate();
 };
 
-pristine.addValidator(hashtagField, hashtagHandler, getHashtagError);
+pristine.addValidator(hashtagField, validateHashtag, getHashtagError);
 hashtagField.addEventListener('input', toggleSubmitButton);
 
-pristine.addValidator(descriptionField, descriptionHandler, getDescriptionError);
+pristine.addValidator(descriptionField, validateDescription, getDescriptionError);
 descriptionField.addEventListener('input', toggleSubmitButton);
 
 userImage.addEventListener('change', onUserImageChange);

@@ -1,4 +1,10 @@
 const DESCRIPTION_MAX_LENGTH = 140;
+const VALID_HASHTAG_PATTERN = /^(?:(?:#([a-zA-Zа-яА-Я0-9]{1,19}))\s*){0,5}$/;
+const ERROR_MESSAGES = {
+  invalidHashtag: 'Введён невалидный хэштег',
+  duplicateHashtag: 'Хэштеги повторяются',
+  descriptionTooLong: `Длина комментария больше ${DESCRIPTION_MAX_LENGTH} символов`,
+};
 
 let errorMessage = '';
 
@@ -7,42 +13,39 @@ const getErrorMessage = () => errorMessage;
 const setErrorMessage = (message) => {
   errorMessage = message;
 };
-const hashtagHandler = (value) => {
+
+
+const validateHashtag = (value) => {
   const inputArray = value.trim().split(/\s+/);
   if (!value.trim()) {
     return true;
   }
 
-  const validHashtagPattern = /^(?:(?:#([a-zA-Zа-яА-Я0-9]{1,19}))\s*){0,5}$/;
-  const uniqueHashtags = new Set();
+  const uniqueHashtags = new Set(inputArray.map((hashtag) => hashtag.toLowerCase()));
 
-  for (const hashtag of inputArray) {
-    const lowerTag = hashtag.toLowerCase();
-
-    if (!validHashtagPattern.test(hashtag)) {
-      setErrorMessage('Введён невалидный хэштег');
-      return false;
-    }
-
-    if (uniqueHashtags.has(lowerTag)) {
-      setErrorMessage('Хэштеги повторяются');
-      return false;
-    }
-    uniqueHashtags.add(lowerTag);
-  }
-
-  setErrorMessage('');
-  return true;
-};
-// Валидация дескрипшина
-const descriptionHandler = (value) => {
-  const descriptionText = value.trim();
-  if (descriptionText.length > DESCRIPTION_MAX_LENGTH) {
-    setErrorMessage(`длина комментария больше ${DESCRIPTION_MAX_LENGTH} символов`);
+  const isValid = [...uniqueHashtags].every((hashtag) => VALID_HASHTAG_PATTERN.test(hashtag));
+  if (!isValid) {
+    setErrorMessage(ERROR_MESSAGES.invalidHashtag);
     return false;
   }
+
+  if (uniqueHashtags.size !== inputArray.length) {
+    setErrorMessage(ERROR_MESSAGES.duplicateHashtag);
+    return false;
+  }
+
   setErrorMessage('');
   return true;
 };
 
-export { getErrorMessage, hashtagHandler, descriptionHandler };
+// Валидация дескрипшина
+const validateDescription = (value) => {
+  const descriptionText = value.trim();
+  const isValid = descriptionText.length <= DESCRIPTION_MAX_LENGTH;
+
+  setErrorMessage(isValid ? '' : ERROR_MESSAGES.descriptionTooLong);
+
+  return isValid;
+};
+
+export { getErrorMessage, validateHashtag, validateDescription };
