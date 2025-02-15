@@ -1,5 +1,6 @@
 import { IsEscapeKey } from './util.js';
 import { validateHashtag, getErrorMessage as getHashtagError, validateDescription, getErrorMessage as getDescriptionError } from './validation-form.js';
+import { resetImageZoom } from './zoomer-image.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const userImage = imageUploadForm.querySelector('.img-upload__input');
@@ -32,6 +33,7 @@ const closeImageUploadForm = () => {
   document.body.removeEventListener('keydown', onDocumentKeydown);
   pristine.reset();
   imageUploadForm.reset();
+  resetImageZoom();
 };
 
 const onImageUploadCancelButtonClick = (evt) => {
