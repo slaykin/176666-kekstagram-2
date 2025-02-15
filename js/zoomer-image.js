@@ -25,11 +25,11 @@ const changeImageZoom = (factor) => {
   updateImageZoom(newSize);
 };
 
-scaleControlSmaller.addEventListener('click', () => changeImageZoom(-1));
-scaleControlBigger.addEventListener('click', () => changeImageZoom(1));
-
 const resetImageZoom = () => {
   updateImageZoom(IMAGE_ZOOM.MAX);
 };
+
+scaleControlSmaller.addEventListener('click', () => changeImageZoom(-1));
+scaleControlBigger.addEventListener('click', () => changeImageZoom(1));
 
 export { resetImageZoom };
