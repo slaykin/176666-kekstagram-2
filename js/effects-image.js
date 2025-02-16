@@ -1,81 +1,138 @@
-const EFFECT_RADIX = 10;
-const EFFECT_STEP = 0.01;
-const MAX_BLUR_VALUE = 3;
-const MAX_BRIGHTNESS = 3;
 const DEFAULT_EFFECT = 'none';
-const DEFAULT_EFFECT_LEVEL = 100;
 
-const SliderConfig = {
-  MIN: 0,
-  MAX: 100,
-  STEP: 1,
+const EffectSettings = {
+  none: {
+    filter: 'none',
+    range: {
+      min: 0,
+      max: 100
+    },
+    start: 0,
+    step: 1,
+    unit: ''
+  },
+  chrome: {
+    filter: 'grayscale',
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    unit: ''
+  },
+  sepia: {
+    filter: 'sepia',
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    unit: ''
+  },
+  marvin: {
+    filter: 'invert',
+    range: {
+      min: 0,
+      max: 100
+    },
+    start: 100,
+    step: 1,
+    unit: '%'
+  },
+  phobos: {
+    filter: 'blur',
+    range: {
+      min: 0,
+      max: 3
+    },
+    start: 3,
+    step: 0.1,
+    unit: 'px'
+  },
+  heat: {
+    filter: 'brightness',
+    range: {
+      min: 1,
+      max: 3
+    },
+    start: 3,
+    step: 0.1,
+    unit: ''
+  },
 };
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const effectLevel = imageUploadForm.querySelector('.img-upload__effect-level');
 const effectLevelInput = imageUploadForm.querySelector('.effect-level__value');
 const effectSlider = imageUploadForm.querySelector('.effect-level__slider');
-const imagePreview = imageUploadForm.querySelector('.img-upload__preview img');
+const picturePreview = imageUploadForm.querySelector('.img-upload__preview img');
 const effectsList = imageUploadForm.querySelector('.effects__list');
-const slider = imageUploadForm.querySelector('.effect-level__slider');
 
-let currentEffect = DEFAULT_EFFECT;
+let currentEffect = EffectSettings[DEFAULT_EFFECT];
 
-noUiSlider.create(effectSlider , {
-  range: {
-    min: SliderConfig.MIN,
-    max: SliderConfig.MAX,
-  },
-  step: SliderConfig.STEP,
-  start: DEFAULT_EFFECT_LEVEL,
+noUiSlider.create(effectSlider, {
+  range: currentEffect.range,
+  start: currentEffect.start,
+  step: currentEffect.step,
   connect: 'lower',
+  format: {
+    to: (value) => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
+    from: (value) => parseFloat(value),
+  }
 });
 
-const getEffectValue = () => parseInt(effectLevelInput.value, EFFECT_RADIX);
+effectLevel.style.display = 'none';
+effectSlider.setAttribute('disabled', true);
 
-const effects = {
-  none: () => 'none',
-  chrome: () => `grayscale(${getEffectValue() * EFFECT_STEP})`,
-  sepia: () => `sepia(${getEffectValue() * EFFECT_STEP})`,
-  marvin: () => `invert(${Math.floor(effectLevelInput.value)}%)`,
-  phobos: () => `blur(${getEffectValue() * MAX_BLUR_VALUE * EFFECT_STEP}px)`,
-  heat: () => `brightness(${getEffectValue() * MAX_BRIGHTNESS * EFFECT_STEP})`,
-};
+const updateSliderOptions = () => {
+  const { range, start, step } = currentEffect;
+  effectSlider.noUiSlider.updateOptions({
+    range,
+    start,
+    step,
+  });
 
-const sliderReset = () => {
-  effectSlider.noUiSlider.set(DEFAULT_EFFECT_LEVEL);
-  effectLevelInput.value = DEFAULT_EFFECT_LEVEL;
-  effectLevel.classList.toggle('hidden', currentEffect === DEFAULT_EFFECT);
-};
+  const isNoneEffect = currentEffect.filter === 'none';
 
-const effectUpdate = () => {
-  imagePreview.style.filter = effects[currentEffect]();
-};
+  effectLevel.style.display = isNoneEffect ? 'none' : 'block';
 
-const effectReset = () => {
-  currentEffect = DEFAULT_EFFECT;
-  sliderReset();
-  effectUpdate();
-};
-
-const onEffectsListClick = (evt) => {
-  const target = evt.target.closest('.effects__item');
-  if (target) {
-    const effectRadio = target.querySelector('.effects__radio');
-    if (effectRadio) {
-      currentEffect = effectRadio.value;
-      sliderReset();
-      effectUpdate();
-    }
+  if (isNoneEffect) {
+    effectSlider.setAttribute('disabled', true);
+  } else {
+    effectSlider.removeAttribute('disabled');
   }
 };
 
-const onSliderUpdate = () => {
-  effectLevelInput.value = effectSlider.noUiSlider.get();
-  effectUpdate();
+const applyEffect = () => {
+  const { filter, unit } = currentEffect;
+  const value = effectSlider.noUiSlider.get();
+
+  effectLevelInput.value = value;
+
+  if (filter !== 'none') {
+    picturePreview.style.filter = `${filter}(${value}${unit})`;
+  } else {
+    picturePreview.style.filter = '';
+  }
 };
 
-effectsList.addEventListener('click', onEffectsListClick);
-slider.noUiSlider.on('update', onSliderUpdate);
+const onEffectsListChange = (evt) => {
+  if (evt.target.matches('.effects__radio')) {
+    currentEffect = EffectSettings[evt.target.value];
+    updateSliderOptions();
+    applyEffect();
+  }
+};
+
+const effectReset = () => {
+  currentEffect = EffectSettings[DEFAULT_EFFECT];
+  updateSliderOptions();
+  applyEffect();
+};
+
+effectsList.addEventListener('change', onEffectsListChange);
+effectSlider.noUiSlider.on('update', applyEffect);
 
 export { effectReset };
