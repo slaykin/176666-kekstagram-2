@@ -1,7 +1,7 @@
 const RADIX = 10;
 const TRANSFORM_SCALE = 0.01;
 
-const IMAGE_ZOOM = {
+const ImageZoom = {
   MIN: 25,
   MAX: 100,
   STEP: 25,
@@ -20,13 +20,13 @@ const updateImageZoom = (newSize) => {
 
 const changeImageZoom = (factor) => {
   const currentSize = parseInt(scaleControlValue.value, RADIX);
-  let newSize = currentSize + (IMAGE_ZOOM.STEP * factor);
-  newSize = Math.max(IMAGE_ZOOM.MIN, Math.min(newSize, IMAGE_ZOOM.MAX));
+  let newSize = currentSize + (ImageZoom.STEP * factor);
+  newSize = Math.max(ImageZoom.MIN, Math.min(newSize, ImageZoom.MAX));
   updateImageZoom(newSize);
 };
 
 const resetImageZoom = () => {
-  updateImageZoom(IMAGE_ZOOM.MAX);
+  updateImageZoom(ImageZoom.MAX);
 };
 
 scaleControlSmaller.addEventListener('click', () => changeImageZoom(-1));
