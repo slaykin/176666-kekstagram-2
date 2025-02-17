@@ -1,5 +1,7 @@
 import { IsEscapeKey } from './util.js';
 import { validateHashtag, getErrorMessage as getHashtagError, validateDescription, getErrorMessage as getDescriptionError } from './validation-form.js';
+import { resetImageZoom } from './zoomer-image.js';
+import { effectReset } from './effects-image.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const userImage = imageUploadForm.querySelector('.img-upload__input');
@@ -8,6 +10,7 @@ const imageUploadCancelButton = imageUploadForm.querySelector('.img-upload__canc
 const hashtagField = imageUploadForm.querySelector('.text__hashtags');
 const descriptionField = imageUploadForm.querySelector('.text__description');
 const imageUploadFormSubmitButton = imageUploadForm.querySelector('.img-upload__submit');
+
 
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -32,6 +35,8 @@ const closeImageUploadForm = () => {
   document.body.removeEventListener('keydown', onDocumentKeydown);
   pristine.reset();
   imageUploadForm.reset();
+  effectReset();
+  resetImageZoom();
 };
 
 const onImageUploadCancelButtonClick = (evt) => {
