@@ -17,81 +17,37 @@ const effectLevelValue = imageUploadForm.querySelector('.effect-level__value');
 const sliderElement = imageUploadForm.querySelector('.effect-level__slider');
 const imageElement = imagePreview.querySelector('img');
 
+const createEffect = (name, options, effectFunction) => ({
+  options: { ...DEFAULT_SLIDER_OPTIONS, ...options },
+  effect: (value) => {
+    effectLevel.classList.remove('hidden');
+    effectLevelValue.value = options.range?.max ? parseInt(value, RADIX) : parseFloat(value);
+    return effectFunction(value);
+  }
+});
+
 const sliderEffects = {
-  none: {
-    options: {
-      ...DEFAULT_SLIDER_OPTIONS,
-    },
-    effect: () => {
-      effectLevel.classList.add('hidden');
-      return 'none';
-    },
-  },
-  chrome: {
-    options: {
-      ...DEFAULT_SLIDER_OPTIONS,
-    },
-    effect: (value) => {
-      effectLevel.classList.remove('hidden');
-      effectLevelValue.value = parseFloat(value);
-      return `grayscale(${value})`;
-    },
-  },
-  sepia: {
-    options: {
-      ...DEFAULT_SLIDER_OPTIONS,
-    },
-    effect: (value) => {
-      effectLevel.classList.remove('hidden');
-      effectLevelValue.value = parseFloat(value);
-      return `sepia(${value})`;
-    }
-  },
-  marvin: {
-    options: {
-      range: {
-        'min': 1,
-        'max': 100
-      },
-      start: 100,
-      step: 1,
-    },
-    effect: (value) => {
-      effectLevel.classList.remove('hidden');
-      effectLevelValue.value = parseInt(value, RADIX);
-      return `invert(${value}%)`;
-    }
-  },
-  phobos: {
-    options: {
-      range: {
-        'min': 0,
-        'max': 3,
-      },
-      start: 3,
-      step: 0.1,
-    },
-    effect: (value) => {
-      effectLevel.classList.remove('hidden');
-      effectLevelValue.value = parseFloat(value);
-      return `blur(${value}px)`;
-    }
-  },
-  heat: {
-    options: {
-      range: {
-        'min': 1,
-        'max': 3,
-      },
-      start: 3,
-      step: 0.1,
-    },
-    effect: (value) => {
-      effectLevel.classList.remove('hidden');
-      effectLevelValue.value = parseFloat(value);
-      return `brightness(${value})`;
-    }
-  },
+  none: createEffect('none', {}, () => {
+    effectLevel.classList.add('hidden');
+    return 'none';
+  }),
+  chrome: createEffect('chrome', {}, (value) => `grayscale(${value})`),
+  sepia: createEffect('sepia', {}, (value) => `sepia(${value})`),
+  marvin: createEffect('marvin', {
+    range: { min: 1, max: 100 },
+    start: 100,
+    step: 1,
+  }, (value) => `invert(${value}%)`),
+  phobos: createEffect('phobos', {
+    range: { min: 0, max: 3 },
+    start: 3,
+    step: 0.1,
+  }, (value) => `blur(${value}px)`),
+  heat: createEffect('heat', {
+    range: { min: 1, max: 3 },
+    start: 3,
+    step: 0.1,
+  }, (value) => `brightness(${value})`),
 };
 
 const createFilters = () => {
@@ -117,10 +73,12 @@ const applyImageFilter = (effect) => {
 const onEffectsListChange = (evt) => {
   evt.preventDefault();
 
-  const target = evt.target.closest('.effects__item').querySelector('input');
-  const effect = target.id.replace('effect-', '');
+  const target = evt.target.closest('.effects__item')?.querySelector('input');
+  if (!target) {
+    return;
+  }
 
-  target.checked = true;
+  const effect = target.id.replace('effect-', '');
 
   updateOptions(effect);
   applyImageFilter(effect);

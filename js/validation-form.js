@@ -34,6 +34,11 @@ const validateHashtag = (value) => {
 
   const uniqueHashtags = new Set(inputArray.map((hashtag) => hashtag.toLowerCase()));
 
+  if (uniqueHashtags.size > 5) {
+    setErrorMessage(ERROR_MESSAGES.invalidHashtag);
+    return false;
+  }
+
   const isValid = [...uniqueHashtags].every((hashtag) => VALID_HASHTAG_PATTERN.test(hashtag));
   if (!isValid) {
     setErrorMessage(ERROR_MESSAGES.invalidHashtag);
