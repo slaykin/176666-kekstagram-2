@@ -2,9 +2,8 @@ import { getData } from './api.js';
 import { renderThumbnails } from './thumbnail-rendering.js';
 import { showAlert } from './util.js';
 import { createFilters } from './create-filters.js';
-import { sendFormData } from './send-form-data.js';
+import './send-form-data.js';
 
-sendFormData();
 createFilters();
 
 const initApplication = async () => {
