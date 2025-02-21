@@ -1,33 +1,26 @@
-const IsEscapeKey = (evt) => evt.key === 'Escape';
+const ALERT_SHOW_TIME = 5000;
 
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const showAlert = (message) => {
+  const errorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
+  const error = errorTemplate.cloneNode(true);
+  const errorTitle = error.querySelector('.data-error__title');
+  errorTitle.textContent = message;
+  document.body.append(error);
+
+  setTimeout(() => {
+    error.remove();
+  }, ALERT_SHOW_TIME);
 };
 
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-function createRandomIdFromRangeGenerator (min, max) {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-}
+const toggleModalElement = (modalElement) => {
+  modalElement.classList.toggle('hidden');
+  document.body.classList.toggle('modal-open');
+};
 
 export {
-  getRandomInteger,
-  getRandomArrayElement,
-  createRandomIdFromRangeGenerator,
-  IsEscapeKey,
+  isEscapeKey,
+  showAlert,
+  toggleModalElement,
 };

@@ -1,33 +1,39 @@
-import { photos } from './create-photo-and-description.js';
 import { openBigPicture } from './open-big-photo.js';
 
-const pictureTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
-const pictures = document.querySelector('.pictures');
-const pictureFragment = document.createDocumentFragment();
-const similarPhotos = photos;
-const pictureContainer = document.querySelector('.pictures');
+const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const picturesContainter = document.querySelector('.pictures');
+const fragment = document.createDocumentFragment();
 
-pictureContainer.addEventListener('click', (evt) => {
-  const targetPicture = evt.target.closest('.picture');
+const getThumbnail = (photo) => {
+  const thumbnail = thumbnailTemplate.cloneNode(true);
+  const image = thumbnail.querySelector('.picture__img');
 
-  if (targetPicture) {
+  thumbnail.href = photo.url;
+  thumbnail.dataset.id = photo.id;
+
+  image.src = photo.url;
+  image.alt = photo.description;
+
+  thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
+  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+
+  const onThumbnailClick = (evt) => {
     evt.preventDefault();
-    openBigPicture(targetPicture.dataset.pictureId);
-  }
-});
+    openBigPicture(photo);
+  };
 
-similarPhotos.forEach((photo) => {
-  const { id, url, description, comments, likes } = photo;
-  const pictureElement = pictureTemplate.cloneNode(true);
+  thumbnail.addEventListener('click', onThumbnailClick);
 
-  pictureElement.dataset.pictureId = id;
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__img').alt = description;
-  pictureElement.querySelector('.picture__comments').textContent = comments.length;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureFragment.appendChild(pictureElement);
-});
+  return thumbnail;
+};
 
-pictures.appendChild(pictureFragment);
+const renderThumbnails = (photos) => {
+  const thumbnails = picturesContainter.querySelectorAll('a.picture');
+  thumbnails.forEach((thumbnail) => thumbnail.remove());
+
+  photos.forEach((photo) => fragment.append(getThumbnail(photo)));
+
+  picturesContainter.append(fragment);
+};
+
+export { renderThumbnails };
