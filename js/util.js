@@ -1,6 +1,6 @@
 const ALERT_SHOW_TIME = 5000;
 
-const IsEscapeKey = (evt) => evt.key === 'Escape';
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const showAlert = (message) => {
   const errorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
@@ -20,7 +20,7 @@ const toggleModalElement = (modalElement) => {
 };
 
 export {
-  IsEscapeKey,
+  isEscapeKey,
   showAlert,
   toggleModalElement,
 };

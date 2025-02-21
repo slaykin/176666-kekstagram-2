@@ -1,4 +1,4 @@
-import { IsEscapeKey, toggleModalElement } from './util.js';
+import { isEscapeKey, toggleModalElement } from './util.js';
 import { validateForm, resetValidateForm } from './validation-form.js';
 import { resetImageZoom } from './zoomer-image.js';
 import { resetEffect } from './create-filters.js';
@@ -46,7 +46,7 @@ const closeUploadForm = () => {
 };
 
 function onDocumentKeydown(evt) {
-  if (IsEscapeKey(evt) &&
+  if (isEscapeKey(evt) &&
     !evt.target.classList.contains('text__hashtags') &&
     !evt.target.classList.contains('text__description')
   ) {
@@ -61,7 +61,7 @@ const closeNotification = (evt) => {
   const existElement = document.querySelector('.success') || document.querySelector('.error');
   const closeButton = existElement.querySelector('button');
 
-  if (evt.target === existElement || evt.target === closeButton || IsEscapeKey(evt)) {
+  if (evt.target === existElement || evt.target === closeButton || isEscapeKey(evt)) {
     existElement.remove();
     document.body.removeEventListener('click', onDocumentNotificationClick);
     document.body.removeEventListener('keydown', onDocumentNotificationKeydown);

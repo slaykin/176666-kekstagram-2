@@ -1,5 +1,5 @@
 import { renderComments, clearComments } from './comments-rendering.js';
-import { IsEscapeKey, toggleModalElement } from './util.js';
+import { isEscapeKey, toggleModalElement } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCloseButton = bigPicture.querySelector('.big-picture__cancel');
@@ -32,7 +32,7 @@ const closeBigPicture = () => {
 };
 
 function onDocumentKeydown(evt) {
-  if (IsEscapeKey(evt)) {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
 
     closeBigPicture();

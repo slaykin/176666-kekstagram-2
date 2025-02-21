@@ -4,6 +4,9 @@ import { showAlert } from './util.js';
 import { createFilters } from './create-filters.js';
 import { sendFormData } from './send-form-data.js';
 
+sendFormData();
+createFilters();
+
 const initApplication = async () => {
   try {
     const photos = await getData();
@@ -14,5 +17,3 @@ const initApplication = async () => {
 };
 
 initApplication();
-createFilters();
-sendFormData();
