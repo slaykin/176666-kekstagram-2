@@ -104,15 +104,21 @@ const sendFormData = async (formElement) => {
 
 const onImageUploadInputChange = () => {
   const file = imageUploadInput.files[0];
-  const image = imageUploadOverlay.querySelector('img');
 
-  image.src = URL.createObjectURL(file);
+  if (file && file.type.startsWith('image/')) {
+    const image = imageUploadOverlay.querySelector('img');
 
-  effectPreviews.forEach((preview) => {
-    preview.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
-  });
+    image.src = URL.createObjectURL(file);
 
-  openUploadForm();
+    effectPreviews.forEach((preview) => {
+      preview.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+    });
+
+    openUploadForm();
+  } else {
+    appendNotification(errorTemplate);
+    imageUploadInput.value = '';
+  }
 };
 
 const onImageUploadCancelButtonClick = () => {
